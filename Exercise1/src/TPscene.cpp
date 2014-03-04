@@ -50,12 +50,14 @@ void TPscene::display()
 
 	// ---- END Background, camera and axis setup
 
+	
 	glPushMatrix();
 	glTranslatef(1.5,0,1.5);
 	table.draw();
+	glTranslatef(3,1.15,3);
+	chair.draw();
 	glPopMatrix();
 	floor.draw();
-
 	// ---- END Primitive drawing section
 
 	// We have been drawing in a memory area that is not visible - the back buffer, 

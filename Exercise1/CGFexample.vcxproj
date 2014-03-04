@@ -67,8 +67,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\ExampleObject.cpp" />
-    <ClCompile Include="src\exercicios1-4.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\myChair.cpp" />
     <ClCompile Include="src\myFloor.cpp" />
     <ClCompile Include="src\myTable.cpp" />
     <ClCompile Include="src\myUnitCube.cpp" />
@@ -76,6 +76,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ExampleObject.h" />
+    <ClInclude Include="src\myChair.h" />
     <ClInclude Include="src\myFloor.h" />
     <ClInclude Include="src\myTable.h" />
     <ClInclude Include="src\myUnitCube.h" />
