@@ -28,17 +28,27 @@ float globalAmbientLight[4]= {0,0,0,1.0};
 
 // Coefficients for material A
 float ambA[3] = {0.2, 0.2, 0.2};
-float difA[3] = {0.6, 0.6, 0.6};
-float specA[3] = {0, 0.8, 0.8};
+float difA[3] = {1, 1, 1};
+float specA[3] = {1, 1, 1};
 float shininessA = 120.f;
 
 // Coefficients for material B
 float ambB[3] = {0.2, 0.2, 0.2};
-float difB[3] = {0.6, 0.6, 0.6};
-float specB[3] = {0.8, 0.8, 0.8};
+float difB[3] = {1, 1, 1};
+float specB[3] = {1, 1, 1};
 float shininessB = 120.f;
 
+// Coefficients for material C (floor)
+float ambC[3] = {0.2, 0.2, 0.2};
+float difC[3] = {0.776, 0.643, 0.357};
+float specC[3] = {0,0,0};
+float shininessC = 120.f;
 
+// Coefficients for material D (walls)
+float ambD[3] = {0.2, 0.2, 0.2};
+float difD[3] = {0.761, 0.753, 0.373};
+float specD[3] = {0,0,0};
+float shininessD = 120.f;
 
 float ambientNull[4]={0,0,0,1};
 float yellow[4]={1,1,0,1};
@@ -100,6 +110,8 @@ void LightingScene::init()
 	//Declares materials
 	materialA = new CGFappearance(ambA,difA,specA,shininessA);
 	materialB = new CGFappearance(ambB,difB,specB,shininessB);
+	materialC = new CGFappearance(ambC,difC,specC,shininessC);
+	materialD = new CGFappearance(ambD,difD,specD,shininessD);
 	
 }
 
@@ -144,6 +156,7 @@ void LightingScene::display()
 
 	//Floor
 	glPushMatrix();
+		materialC->apply();
 		glTranslated(7.5,0,7.5);
 		glScaled(15,0.2,15);
 		wall->draw();
@@ -151,6 +164,7 @@ void LightingScene::display()
 
 	//LeftWall
 	glPushMatrix();
+		materialD->apply();
 		glTranslated(0,4,7.5);
 		glRotated(-90.0,0,0,1);
 
@@ -160,6 +174,7 @@ void LightingScene::display()
 
 	//PlaneWall
 	glPushMatrix();
+		materialD->apply();
 		glTranslated(7.5,4,0);
 		glRotated(90.0,1,0,0);
 		glScaled(15,0.2,8);

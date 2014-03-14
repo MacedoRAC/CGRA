@@ -13,24 +13,27 @@ CGFappearance* materialC = new CGFappearance(ambC,difC,specC,shininessC);
 	// Coefficients for material D
 float ambD[3] = {0.2, 0.2, 0.2};
 float difD[3] = {0.5,0.5,0.5};
-float specD[3] = {0.5, 0.5, 0.5};
+float specD[3] = {0.9, 0.9, 0.9};
 float shininessD = 120.f;
 
 CGFappearance* materialD = new CGFappearance(ambD,difD,specD,shininessD);
 	//desenhar pernas
 	glPushMatrix();
+	materialD->apply();
 	glTranslatef(-2.35,1.75,-1.35);
 	glScalef(0.3,3.5,0.3);
 	cube.draw();
 	glPopMatrix();
 
 	glPushMatrix();
+	materialD->apply();
 	glTranslatef(2.35,1.75,-1.35);
 	glScalef(0.3,3.5,0.3);
 	cube.draw();
 	glPopMatrix();
 
 	glPushMatrix();
+	materialD->apply();
 	glTranslatef(-2.35,1.75,1.35);
 	glScalef(0.3,3.5,0.3);
 	cube.draw();
