@@ -28,6 +28,8 @@ public:
 	myLamp* lamp1;
 	CGFappearance* materialA;
 	CGFappearance* materialB;
+	CGFappearance* materialC;
+	CGFappearance* materialD;
 
 	~LightingScene();
 };

@@ -38,6 +38,17 @@ float difB[3] = {0.6, 0.6, 0.6};
 float specB[3] = {0.8, 0.8, 0.8};
 float shininessB = 120.f;
 
+// Coefficients for material C (floor)
+float ambC[3] = {0.2, 0.2, 0.2};
+float difC[3] = {0.776, 0.643, 0.357};
+float specC[3] = {0,0,0};
+float shininessC = 120.f;
+
+// Coefficients for material D (walls)
+float ambD[3] = {0.2, 0.2, 0.2};
+float difD[3] = {0.761, 0.753, 0.373};
+float specD[3] = {0,0,0};
+float shininessD = 120.f;
 
 
 float ambientNull[4]={0,0,0,1};
@@ -96,12 +107,14 @@ void LightingScene::init()
 	wall = new Plane();
 	boardA = new Plane(BOARD_A_DIVISIONS);
 	boardB = new Plane(BOARD_B_DIVISIONS);
-	cylinder1= new myCylinder(20,4, true);
-	cylinder2= new myCylinder(20,4, false);
-	lamp1=new myLamp(20,10,true);
+	cylinder1= new myCylinder(10,4, true);
+	cylinder2= new myCylinder(10,4, false);
+	lamp1=new myLamp(10,5,true);
 	//Declares materials
 	materialA = new CGFappearance(ambA,difA,specA,shininessA);
 	materialB = new CGFappearance(ambB,difB,specB,shininessB);
+	materialC = new CGFappearance(ambC,difC,specC,shininessC);
+	materialD = new CGFappearance(ambD,difD,specD,shininessD);
 	
 }
 
@@ -134,6 +147,7 @@ void LightingScene::display()
 	//glShadeModel( GL_SMOOTH );
 	//Lamp1
 	glPushMatrix();
+		glTranslated(8,8,8);
 		lamp1->draw();
 	glPopMatrix();
 	//Cylinder1
@@ -160,6 +174,7 @@ void LightingScene::display()
 
 	//Floor
 	glPushMatrix();
+		materialC->apply();
 		glTranslated(7.5,0,7.5);
 		glScaled(15,0.2,15);
 		wall->draw();
@@ -167,15 +182,16 @@ void LightingScene::display()
 
 	//LeftWall
 	glPushMatrix();
+		materialD->apply();
 		glTranslated(0,4,7.5);
 		glRotated(-90.0,0,0,1);
-
 		glScaled(8,0.2,15);
 		wall->draw();
 	glPopMatrix();
 
 	//PlaneWall
 	glPushMatrix();
+		materialD->apply();
 		glTranslated(7.5,4,0);
 		glRotated(90.0,1,0,0);
 		glScaled(15,0.2,8);

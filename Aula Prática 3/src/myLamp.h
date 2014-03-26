@@ -6,7 +6,8 @@
 class myLamp : public CGFobject {
 	int slices;
 	int stacks;
-	float angle; 
+	float angle;
+	float verticalAngle;
 	bool smooth;
 	public:
 		myLamp(int slices, int stacks, bool smooth);
