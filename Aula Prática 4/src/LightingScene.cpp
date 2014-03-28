@@ -58,8 +58,8 @@ float shininessS = 80.f;
 
 // Coefficients for boardAppearance
 float ambBd[3] = {0.2, 0.2, 0.2};
-float difBd[3] = {0.2,0.2,0.2};
-float specBd[3] = {0.5, 0.5, 0.5};
+float difBd[3] = {0.3,0.3,0.3};
+float specBd[3] = {0.6, 0.6, 0.6};
 float shininessBd = 120.f;
 
 float ambientNull[4]={0,0,0,1};
