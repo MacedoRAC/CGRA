@@ -115,12 +115,13 @@ void LightingScene::init()
 
 	//Declares scene elements
 	table = new myTable();
-	wall = new Plane();
-	boardA = new Plane(BOARD_A_DIVISIONS);
-	boardB = new Plane(BOARD_B_DIVISIONS);
+	wall = new Plane(10, -1, -1, 2, 2);
+	boardA = new Plane(BOARD_A_DIVISIONS, 0, 0, 1, 1);
+	boardB = new Plane(BOARD_B_DIVISIONS, 0,-0.14,1,1.14);
 	cylinder1= new myCylinder(10,4, true);
 	cylinder2= new myCylinder(10,4, false);
 	lamp1=new myLamp(10,5,true);
+	floor = new Plane(120, 0, 0, 10, 12);
 	//Declares materials
 	materialA = new CGFappearance(ambA,difA,specA,shininessA);
 	materialB = new CGFappearance(ambB,difB,specB,shininessB);
@@ -130,7 +131,12 @@ void LightingScene::init()
 	slidesAppearance->setTexture("slides.png");
 	boardAppearance = new CGFappearance(ambBd,difBd,specBd,shininessBd);
 	boardAppearance->setTexture("board.png");
-	
+	boardAppearance->setTextureWrap(GL_CLAMP, GL_CLAMP);
+	windowAppearance = new CGFappearance(ambBd,difBd,specBd,shininessBd);
+	windowAppearance->setTexture("window.png");
+	windowAppearance->setTextureWrap(GL_CLAMP, GL_CLAMP);
+	floorAppearance=new CGFappearance(ambBd,difBd,specBd,shininessBd);
+	floorAppearance->setTexture("floor.png");
 }
 
 void LightingScene::display() 
@@ -189,18 +195,19 @@ void LightingScene::display()
 
 	//Floor
 	glPushMatrix();
-		materialC->apply();
+		floorAppearance->apply();
 		glTranslated(7.5,0,7.5);
 		glScaled(15,0.2,15);
-		wall->draw();
+		floor->draw();
 	glPopMatrix();
 
 	//LeftWall
 	glPushMatrix();
-		materialD->apply();
+		windowAppearance->apply();
 		glTranslated(0,4,7.5);
 		glRotated(-90.0,0,0,1);
 		glScaled(8,0.2,15);
+		glRotated(90,0,1,0);
 		wall->draw();
 	glPopMatrix();
 

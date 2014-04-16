@@ -23,6 +23,7 @@ public:
 	Plane* wall;
 	Plane* boardA;
 	Plane* boardB;
+	Plane* floor;
 	myCylinder* cylinder1;
 	myCylinder* cylinder2;
 	myLamp* lamp1;
@@ -32,6 +33,9 @@ public:
 	CGFappearance* materialD;
 	CGFappearance* slidesAppearance;
 	CGFappearance* boardAppearance;
+	CGFappearance* windowAppearance;
+	CGFappearance* floorAppearance;
+
 
 	~LightingScene();
 };
