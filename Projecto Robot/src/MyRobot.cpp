@@ -1,47 +1,162 @@
 #include"MyRobot.h"
 #include "CGFapplication.h"
+#include<iostream>
+
+#define pi acos(-1.0)
+
 
 MyRobot:: MyRobot(){
 	angle=-150;
 	x=8;
 	z=8.5;
 	increment=0.2;
+	calcVertexBase();
+	calcVertexTop();
+	stacks=5;
+}
+
+void MyRobot:: calcVertexBase(){
+	Vertex vertex;
+	vertex.x= -0.5;
+	vertex.y= 0;
+	vertex.z= 0.5;
+
+	for(unsigned int i=0; i<13; i++){//only save xx and zz information. yy is alaways 0
+
+		vertexBase.push_back(vertex);
+
+		if(i<=3)
+			vertex.x +=(float)1/3;
+		else if(i>3 && i<=6)
+			vertex.z -=(float)1/3;
+		else if(i>6 && i<=9)
+			vertex.x -=(float)1/3;
+		else if(i>9 && i<=11)
+			vertex.z+=(float)1/3;
+		else
+			vertex=vertexBase[0];
+	}
+}
+
+void MyRobot:: calcVertexTop(){
+	float alpha = (float)3/4*pi;
+	float inc= pi/6;
+	Vertex vertex;
+
+	for(unsigned int i=0; i<13; i++){//only save xx and zz information. yy is alaways 1
+		if(i==12)
+			vertex=vertexTop[0];
+		else{
+			vertex.x = 0.25*cos(alpha + inc*i);//xx
+			vertex.y = 1; //yy
+			vertex.z = 0.25*sin(alpha + inc*i);//zz
+		}
+
+		vertexTop.push_back(vertex);
+	}
 }
 
 void MyRobot:: draw(){
 
 	glTranslatef(x, 0, z);
 	glRotatef(angle,0,1,0);
-
+	/*
 	glBegin(GL_TRIANGLES);
 	glVertex3f(0.5, 0.3, 0);
 	glVertex3f(-0.5, 0.3, 0);
 	glVertex3f(0, 0.3, 2);
-	glEnd();
-}
+	glEnd();*/
 
-float MyRobot:: getAngle(){
-	return this->angle; 
-}
 
-void MyRobot:: setAngle(float angle){
-	this->angle=angle;
-}
+	for(int j=0; j<stacks ; j++){
+		glBegin(GL_TRIANGLE_STRIP);
+		for(unsigned i=0; i<13; i++){
+			if(i!=12){
+				glNormal3f(vertexBase[i].x - j * (vertexBase[i].x - vertexTop[i].x) / stacks,
+					vertexBase[i].y + j * (1.0 / stacks),
+					vertexBase[i].z - j * (vertexBase[i].z - vertexTop[i].z) / stacks);
 
-float MyRobot:: getX(){
-	return this->x;
-}
+				glVertex3f(vertexBase[i].x - j * (vertexBase[i].x - vertexTop[i].x) / stacks,
+					vertexBase[i].y + j * (1.0 / stacks),
+					vertexBase[i].z - j * (vertexBase[i].z - vertexTop[i].z) / stacks);
 
-void MyRobot:: setX(float x){
-	this->x=x;
-}
 
-float MyRobot:: getZ(){
-	return this->z;
-}
+				glNormal3f(vertexBase[i + 1].x - j * (vertexBase[i + 1].x - vertexTop[i + 1].x) / stacks,
+					vertexBase[i + 1].y + j * (1.0 / stacks),
+					vertexBase[i + 1].z - j * (vertexBase[i + 1].z - vertexTop[i + 1].z) / stacks);
 
-void MyRobot:: setZ(float z){
-	this->z=z;
+				glVertex3f(vertexBase[i + 1].x - j * (vertexBase[i + 1].x - vertexTop[i + 1].x) / stacks,
+					vertexBase[i + 1].y + j * (1.0 / stacks),
+					vertexBase[i + 1].z - j * (vertexBase[i + 1].z - vertexTop[i + 1].z) / stacks);
+
+
+				glNormal3f(vertexBase[i].x - (j + 1) * (vertexBase[i].x - vertexTop[i].x) / stacks,
+					vertexBase[i].y + (j + 1) * (1.0 / stacks),
+					vertexBase[i].z - (j + 1) * (vertexBase[i].z - vertexTop[i].z) / stacks);
+
+				glVertex3f(vertexBase[i].x - (j + 1) * (vertexBase[i].x - vertexTop[i].x) / stacks,
+					vertexBase[i].y + (j + 1) * (1.0 / stacks),
+					vertexBase[i].z - (j + 1) * (vertexBase[i].z - vertexTop[i].z) / stacks);
+
+
+				glNormal3f(vertexBase[i + 1].x - (j + 1) * (vertexBase[i + 1].x - vertexTop[i + 1].x) / stacks,
+					vertexBase[i + 1].y + (j + 1) * (1.0 / stacks),
+					vertexBase[i + 1].z - (j + 1) * (vertexBase[i + 1].z - vertexTop[i + 1].z) / stacks);
+
+				glVertex3f(vertexBase[i + 1].x - (j + 1) * (vertexBase[i + 1].x - vertexTop[i + 1].x) / stacks,
+					vertexBase[i + 1].y + (j + 1) * (1.0 / stacks),
+					vertexBase[i + 1].z - (j + 1) * (vertexBase[i + 1].z - vertexTop[i + 1].z) / stacks);
+			}else{
+				glNormal3f(vertexBase[i].x - j * (vertexBase[i].x - vertexTop[i].x) / stacks,
+					vertexBase[i].y + j * (1.0 / stacks),
+					vertexBase[i].z - j * (vertexBase[i].z - vertexTop[i].z) / stacks);
+
+				glVertex3f(vertexBase[i].x - j * (vertexBase[i].x - vertexTop[i].x) / stacks,
+					vertexBase[i].y + j * (1.0 / stacks),
+					vertexBase[i].z - j * (vertexBase[i].z - vertexTop[i].z) / stacks);
+
+
+				glNormal3f(vertexBase[0].x - j * (vertexBase[i + 1].x - vertexTop[0].x) / stacks,
+					vertexBase[0].y + j * (1.0 / stacks),
+					vertexBase[0].z - j * (vertexBase[0].z - vertexTop[0].z) / stacks);
+
+				glVertex3f(vertexBase[0].x - j * (vertexBase[0].x - vertexTop[0].x) / stacks,
+					vertexBase[0].y + j * (1.0 / stacks),
+					vertexBase[0].z - j * (vertexBase[0].z - vertexTop[0].z) / stacks);
+
+
+				glNormal3f(vertexBase[i].x - (j + 1) * (vertexBase[i].x - vertexTop[i].x) / stacks,
+					vertexBase[i].y + (j + 1) * (1.0 / stacks),
+					vertexBase[i].z - (j + 1) * (vertexBase[i].z - vertexTop[i].z) / stacks);
+
+				glVertex3f(vertexBase[i].x - (j + 1) * (vertexBase[i].x - vertexTop[i].x) / stacks,
+					vertexBase[i].y + (j + 1) * (1.0 / stacks),
+					vertexBase[i].z - (j + 1) * (vertexBase[i].z - vertexTop[i].z) / stacks);
+
+
+				glNormal3f(vertexBase[0].x - (j + 1) * (vertexBase[0].x - vertexTop[0].x) / stacks,
+					vertexBase[0].y + (j + 1) * (1.0 / stacks),
+					vertexBase[0].z - (j + 1) * (vertexBase[0].z - vertexTop[0].z) / stacks);
+
+				glVertex3f(vertexBase[0].x - (j + 1) * (vertexBase[0].x - vertexTop[0].x) / stacks,
+					vertexBase[0].y + (j + 1) * (1.0 / stacks),
+					vertexBase[0].z - (j + 1) * (vertexBase[0].z - vertexTop[0].z) / stacks);
+			}
+			glEnd();
+		}
+	}
+
+
+	//draw vertexTop of the robot
+	glPushMatrix();
+	glBegin(GL_POLYGON);
+	for(unsigned int i=0; i<13; i++){
+		glNormal3f(0,1,0);
+		glVertex3f(vertexTop[i].x, vertexTop[i].y, vertexTop[i].z);
+	}
+	glEnd();	
+	glPopMatrix();
+
 }
 
 void MyRobot:: rotate(int direction){//if direction==0 rotate to the right, if 1 rotate to the left
@@ -49,92 +164,16 @@ void MyRobot:: rotate(int direction){//if direction==0 rotate to the right, if 1
 		angle+=3;
 	else if(direction==0)
 		angle-=3;
-
-	/*if(!( (0<angle && angle<360) || (-360 < angle && angle < 0))){ //removes complete laps
-	float temp=angle/360;
-	angle-=temp*360;
-	}*/
-
-	toPositiveAngle();
-}
-
-int MyRobot:: returnQuadrant(){
-
-	if((0<=angle && angle<=90) || (-360<=angle && angle<=-270))
-		return 1;
-	else if((90<angle && angle<=180) || (-270<angle && angle<=-180))
-		return 2;
-	else if((180<angle && angle<=270) || (-180<angle && angle<=-90))
-		return 3;
-	else
-		return 4;
-}
-
-void MyRobot:: toPositiveAngle(){
-	angle = fmod(angle, 360);
-	if (angle < 0) 
-		angle += 360;
 }
 
 void MyRobot:: moveForward(){
-	int quadrant=returnQuadrant();
 
-	/*switch(quadrant){
-	case 1:
-	x+=increment*sin(angle);
-	z+=increment*cos(angle);
-	break;
-	case 2:
-	if(angle<0){
-	x+=increment*cos(angle);
-	z+=increment*sin(angle);
-	}else{
-	x+=increment*cos(angle-90);
-	z+=increment*sin(angle-90);
-	}
-	break;
-	case 3:
-	if(angle<0){
-	x+=increment*sin(angle);
-	z+=increment*cos(angle);
-	}else{
-	x+=increment*sin(angle-180);
-	z+=increment*cos(angle-180);
-	}
-	break;
-	case 4:
-	if(angle<0){
-	x+=increment*cos(angle);
-	z+=increment*sin(angle);
-	}else{
-	x+=increment*cos(angle-270);
-	z+=increment*sin(angle-270);
-	}
-	break;
-	}*/
-
-	switch(quadrant){
-	case 1:
-		x+=increment*sin(angle);
-		z+=increment*cos(angle);
-		break;
-	case 2:
-		x+=increment*cos(angle-90);
-		z+=increment*sin(angle-90);
-		break;
-	case 3:
-		x+=increment*sin(angle-180);
-		z+=increment*cos(angle-180);
-		break;
-	case 4:
-		x+=increment*cos(angle-270);
-		z+=increment*sin(angle-270);
-		break;
-	}
-
+	x+=increment*sin(angle*2*pi/360);
+	z+=increment*cos(angle*2*pi/360);
 }
 
 void MyRobot:: moveBack(){
-	x+=increment*cos(angle);
-	z+=increment*sin(angle);
+
+	x-=increment*sin(angle*2*pi/360);
+	z-=increment*cos(angle*2*pi/360);
 }

@@ -62,6 +62,13 @@ float difBd[3] = {0.3,0.3,0.3};
 float specBd[3] = {0.6, 0.6, 0.6};
 float shininessBd = 120.f;
 
+//Coefficients for clock
+float ambClock[3] = {0.4, 0.4, 0.4};
+float difClock[3] = {0.6, 0.6, 0.6};
+float specClock[3] = {0.2, 0.2, 0.2};
+float shininessClock = 120.f;
+
+float ambient[4]={0.6,0.6,0.6,1};
 float ambientNull[4]={0,0,0,1};
 float yellow[4]={1,1,0,1};
 
@@ -80,41 +87,46 @@ void LightingScene::init()
 	// Declares and enables two lights, with null ambient component
 
 	light0 = new CGFlight(GL_LIGHT0, light0_pos);
-	light0->setAmbient(ambientNull);
+	light0->setAmbient(ambient);
 	light0->setSpecular(yellow);
 
-	//light0->disable();
-	light0->enable();
+	light0->disable();
+	//light0->enable();
 
 	light1 = new CGFlight(GL_LIGHT1, light1_pos);
-	light1->setAmbient(ambientNull);
+	light1->setAmbient(ambient);
 	
-	//light1->disable();
-	light1->enable();
+	light1->disable();
+	//light1->enable();
 
 	light2 = new CGFlight(GL_LIGHT2, light2_pos);
 	light2->setKc(0);
 	light2->setKl(1);
 	light2->setKq(0);
-	light2->setAmbient(ambientNull);
+	light2->setAmbient(ambient);
 
-	//light2->disable();
-	light2->enable();
+	light2->disable();
+	//light2->enable();
 
 	light3 = new CGFlight(GL_LIGHT3, light3_pos);
 	light3->setKc(0);
 	light3->setKl(0);
 	light3->setKq(1);
-	light3->setAmbient(ambientNull);
+	light3->setAmbient(ambient);
 
-	//light3->disable();
-	light3->enable();
+	light3->disable();
+	//light3->enable();
 
 	// Uncomment below to enable normalization of lighting normal vectors
 	 glEnable (GL_NORMALIZE);
 
 	//Declares scene elements
 	sceneVar=0;
+	l0=1;//all lights start turned on
+	l1=1;
+	l2=1;
+	l3=1;
+	clockSwitcher=1;
 	robot=new MyRobot();
 	table = new myTable();
 	wall = new Plane(10, -1, -1, 2, 2);
@@ -124,6 +136,9 @@ void LightingScene::init()
 	cylinder2= new myCylinder(10,4, false);
 	lamp1=new myLamp(10,5,true);
 	floor = new Plane(120, 0, 0, 10, 12);
+	clock=new myClock();
+	impostor=new Impostor();
+	landscape=new Plane(0,0,1,1);
 	//Declares materials
 	materialA = new CGFappearance(ambA,difA,specA,shininessA);
 	materialB = new CGFappearance(ambB,difB,specB,shininessB);
@@ -134,11 +149,26 @@ void LightingScene::init()
 	boardAppearance = new CGFappearance(ambBd,difBd,specBd,shininessBd);
 	boardAppearance->setTexture("board.png");
 	boardAppearance->setTextureWrap(GL_CLAMP, GL_CLAMP);
-	windowAppearance = new CGFappearance(ambBd,difBd,specBd,shininessBd);
-	windowAppearance->setTexture("window.png");
-	windowAppearance->setTextureWrap(GL_CLAMP, GL_CLAMP);
+	landscapeAppearance = new CGFappearance(ambBd,difBd,specBd,shininessBd);
+	landscapeAppearance->setTexture("impostor.png");
 	floorAppearance=new CGFappearance(ambBd,difBd,specBd,shininessBd);
 	floorAppearance->setTexture("floor.png");
+	clockAppearance=new CGFappearance(ambClock,difClock,specClock,shininessClock);
+	clockAppearance->setTexture("clock.png");
+
+	setUpdatePeriod(100);
+}
+
+void LightingScene:: update(unsigned long update){
+	if(clockSwitcher==1)
+		clock->update(update);
+}
+
+void LightingScene:: setClockSwitcher(){
+	if(clockSwitcher==0)
+		clockSwitcher=1;
+	else
+		clockSwitcher=0;
 }
 
 void LightingScene::display() 
@@ -156,18 +186,38 @@ void LightingScene::display()
 	// Apply transformations corresponding to the camera position relative to the origin
 	CGFscene::activeCamera->applyView();
 
-	if(light0->enabled){
+	if(l0==1){
+		light0->enable();
 		light0->draw();
+	}else{
+		light0->disable();
+		light0->draw();
+	}
 
-	if(light1->enabled){
+	if(l1==1){
+		light1->enable();
 		light1->draw();
-
-	if(light2->enabled){
-		light2->draw();
-
-	if(light3->enabled){
-		light3->draw();
+	}else{
+		light1->disable();
+		light1->draw();
+	}
 	
+	if(l2==1){
+		light2->enable();
+		light2->draw();
+	}else{
+		light2->disable();
+		light2->draw();
+	}
+
+	if(l3==1){
+		light3->enable();
+		light3->draw();
+	}else{
+		light3->disable();
+		light3->draw();
+	}
+
 	// Draw axis
 	axis.draw();
 
@@ -206,6 +256,13 @@ void LightingScene::display()
 		table->draw();
 	glPopMatrix();
 	*/
+
+	//IMPOSTOR
+	glPushMatrix();
+		materialD->apply();
+		impostor->draw();
+	glPopMatrix();
+
 	//Floor
 	glPushMatrix();
 		floorAppearance->apply();
@@ -214,22 +271,22 @@ void LightingScene::display()
 		floor->draw();
 	glPopMatrix();
 
-	//LeftWall
+	//Landscape
 	glPushMatrix();
-		windowAppearance->apply();
-		glTranslated(0,4,7.5);
+		landscapeAppearance->apply();
+		glTranslated(-20,4,10);
 		glRotated(-90.0,0,0,1);
-		glScaled(8,0.2,15);
+		glScaled(25,0.2,40);
 		glRotated(90,0,1,0);
-		wall->draw();
+		landscape->draw();
 	glPopMatrix();
 
 	//PlaneWall
 	glPushMatrix();
 		materialD->apply();
-		glTranslated(7.5,4,0);
+		glTranslated(7.5,5,0);
 		glRotated(90.0,1,0,0);
-		glScaled(15,0.2,8);
+		glScaled(15,0.2,10);
 		wall->draw();
 	glPopMatrix();
 
@@ -256,8 +313,17 @@ void LightingScene::display()
 	//---------------
 	//-----ROBOT-----
 	//---------------
-	robot->draw();
-	
+	glPushMatrix();
+		robot->draw();
+	glPopMatrix();
+
+	//CLOCK 
+	glPushMatrix();
+		clockAppearance->apply();
+		glTranslatef(7.25,8.5,0.3);
+		clock->draw();
+	glPopMatrix();
+
 	// ---- END Primitive drawing section
 	
 
@@ -268,34 +334,6 @@ void LightingScene::display()
 }
 
 void LightingScene:: toggleSomething(){
-}
-
-void LightingScene:: setLight0(){
-	if(light0->enabled)
-		light0->disable();
-	else
-		light0->enable();
-}
-
-void LightingScene:: setLight1(){
-	if(light1->enabled)
-		light1->disable();
-	else
-		light1->enable();
-}
-
-void LightingScene:: setLight2(){
-	if(light2->enabled)
-		light2->disable();
-	else
-		light2->enable();
-}
-
-void LightingScene:: setLight3(){
-	if(light3->enabled)
-		light3->disable();
-	else
-		light3->enable();
 }
 
 LightingScene::~LightingScene() 

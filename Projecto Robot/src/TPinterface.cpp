@@ -48,11 +48,14 @@ void TPinterface::initGUI()
 	*/
 
 	GLUI_Panel *lights = addPanel("Lights", 1);
-	
-	addCheckboxToPanel(lights, "Light 1", &(((LightingScene*) scene)->setLight0()), 0);
-	addCheckboxToPanel(lights, "Light 2", &(((LightingScene*) scene)->setLight1()), 1);
-	addCheckboxToPanel(lights, "Light 3", &(((LightingScene*) scene)->setLight2()), 2);
-	addCheckboxToPanel(lights, "Light 4", &(((LightingScene*) scene)->setLight3()), 3);
+		addCheckboxToPanel(lights, "Light 1", &(((LightingScene*) scene)->l0), 0);
+		addCheckboxToPanel(lights, "Light 2", &(((LightingScene*) scene)->l1), 1);
+		addCheckboxToPanel(lights, "Light 3", &(((LightingScene*) scene)->l2), 2);
+		addCheckboxToPanel(lights, "Light 4", &(((LightingScene*) scene)->l3), 3);
+
+	addColumn();
+
+	addButton("Clock", 4);
 }
 
 void TPinterface::processGUI(GLUI_Control *ctrl)
@@ -66,6 +69,9 @@ void TPinterface::processGUI(GLUI_Control *ctrl)
 		case 2:
 			break;
 		case 3:
+			break;
+		case 4:
+			((LightingScene*) scene)->setClockSwitcher();
 			break;
 	};
 

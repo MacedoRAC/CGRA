@@ -15,7 +15,7 @@ void myLamp:: draw(){
 	float inc=1.0/stacks;
 
 	for(float j=0; j<1 ; j+=inc){
-		for(unsigned int i=0; i<slices ; i++){
+		for(int i=0; i<slices ; i++){
 			glBegin(GL_QUADS);
 				if(!smooth){
 					

@@ -34,9 +34,9 @@ void myCylinder:: draw(){
 			if(j==(stacks-1)){
 				glBegin(GL_POLYGON);
 				for(int k=0; k<slices; k++){
-					glNormal3d(0,1,0);
-					glTexCoord2f(abs(cos(angle*k)), abs(sin(angle*k)));
-					glVertex3d(cos(angle*k), j+1, sin(angle*k));	
+					glNormal3d(cos(angle*k), 0, sin(angle*k));
+					glTexCoord2f((cos(angle*k)/2)+0.5, (sin(angle*k)/2)+0.5);
+					glVertex3d(cos(angle*k), j, sin(angle*k));	
 				}
 				glEnd();
 			}

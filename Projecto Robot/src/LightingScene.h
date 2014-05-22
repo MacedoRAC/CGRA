@@ -8,6 +8,8 @@
 #include "myCylinder.h"
 #include "myLamp.h"
 #include "MyRobot.h"
+#include "myClock.h"
+#include "Impostor.h"
 
 class LightingScene : public CGFscene
 {
@@ -15,10 +17,8 @@ public:
 	void init();
 	void display();
 	void toggleSomething();
-	void setLight0();
-	void setLight1();
-	void setLight2();
-	void setLight3();
+	virtual void update(unsigned long);
+	void setClockSwitcher();
 
 	CGFlight* light0;
 	CGFlight* light1;
@@ -39,11 +39,17 @@ public:
 	CGFappearance* materialD;
 	CGFappearance* slidesAppearance;
 	CGFappearance* boardAppearance;
-	CGFappearance* windowAppearance;
+	CGFappearance* landscapeAppearance;
 	CGFappearance* floorAppearance;
+	CGFappearance* clockAppearance;
 	MyRobot* robot;
+	myClock* clock;
+	Impostor* impostor;
+	Plane* landscape;
 
 	int sceneVar;
+	int l0, l1, l2, l3; //lights' switchers
+	int clockSwitcher;
 
 	~LightingScene();
 };
