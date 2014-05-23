@@ -155,6 +155,8 @@ void LightingScene::init()
 	floorAppearance->setTexture("floor.png");
 	clockAppearance=new CGFappearance(ambClock,difClock,specClock,shininessClock);
 	clockAppearance->setTexture("clock.png");
+	defaultRobot= new CGFappearance(ambD,difD,specD,shininessD);
+	defaultRobot->setTexture("defaultSkin.jpg");
 
 	setUpdatePeriod(100);
 }
@@ -314,6 +316,7 @@ void LightingScene::display()
 	//-----ROBOT-----
 	//---------------
 	glPushMatrix();
+		defaultRobot->apply();
 		robot->draw();
 	glPopMatrix();
 

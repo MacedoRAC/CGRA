@@ -42,6 +42,7 @@ public:
 	CGFappearance* landscapeAppearance;
 	CGFappearance* floorAppearance;
 	CGFappearance* clockAppearance;
+	CGFappearance* defaultRobot;
 	MyRobot* robot;
 	myClock* clock;
 	Impostor* impostor;

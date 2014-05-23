@@ -55,7 +55,13 @@ void TPinterface::initGUI()
 
 	addColumn();
 
-	addButton("Clock", 4);
+	GLUI_Panel *clock = addPanel("Clock", 1);
+		addButtonToPanel(clock, "Pause/Play", 4);
+
+	addColumn();
+
+	GLUI_Panel *robot = addPanel("Robot", 1);
+		addCheckboxToPanel(robot, "Wireframe", &(((LightingScene*) scene)->robot->wireframe), 5);
 }
 
 void TPinterface::processGUI(GLUI_Control *ctrl)

@@ -20,6 +20,7 @@ class MyRobot{
 	int stacks;
 	vector<Vertex> vertexBase;
 	vector<Vertex> vertexTop;
+	
 public:
 	MyRobot();
 	void draw();
@@ -28,7 +29,7 @@ public:
 	void moveBack();
 	void calcVertexBase();
 	void calcVertexTop();
-
+	int wireframe;
 };
 
 #endif

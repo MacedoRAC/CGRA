@@ -25,7 +25,8 @@ void myCylinder:: draw(){
 				glNormal3d(cos(angle*i), 0, sin(angle*i));
 				glVertex3d(cos(angle*i), j, sin(angle*i));
 				glVertex3d(cos(angle*i), j+1, sin(angle*i));
-				glNormal3d(sin(angle*(i+1)), 0, cos(angle*(i+1)));
+				
+				glNormal3d(cos(angle*(i+1)), 0, sin(angle*(i+1)));
 				glVertex3d(cos(angle*(i+1)), j+1, sin(angle*(i+1)));
 				glVertex3d(cos(angle*(i+1)), j, sin(angle*(i+1)));
 			}
