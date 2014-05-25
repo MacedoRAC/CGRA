@@ -42,7 +42,7 @@ public:
 	CGFappearance* landscapeAppearance;
 	CGFappearance* floorAppearance;
 	CGFappearance* clockAppearance;
-	CGFappearance* defaultRobot;
+	CGFappearance* robotAppearance;
 	CGFappearance* window;
 	MyRobot* robot;
 	myClock* clock;
@@ -52,6 +52,8 @@ public:
 	int sceneVar;
 	int l0, l1, l2, l3; //lights' switchers
 	int clockSwitcher;
+	int skinRobot;
+	int landscapeOptions;
 
 	~LightingScene();
 };

@@ -38,7 +38,7 @@ public:
 	void calcVertexBase();
 	void calcVertexTop();
 	void calcTextCoord();
-	int wireframe;
+	int modes;
 };
 
 #endif

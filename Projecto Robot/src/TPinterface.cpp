@@ -61,8 +61,24 @@ void TPinterface::initGUI()
 	addColumn();
 
 	GLUI_Panel *robot = addPanel("Robot", 1);
-		addCheckboxToPanel(robot, "Wireframe", &(((LightingScene*) scene)->robot->wireframe), 5);
+		GLUI_Listbox* skins= addListboxToPanel (robot, "Skins", &(((LightingScene*) scene)->skinRobot), 5);
+		skins->add_item(0, "Default");
+		skins->add_item(1, "Camouflaged");
+		skins->add_item(2, "Abstract");
+	
+		GLUI_RadioGroup *mode = addRadioGroupToPanel(robot, &(((LightingScene*) scene)->robot->modes), 6);
+		GLUI_RadioButton *textured = addRadioButtonToGroup(mode, "Textured");
+		GLUI_RadioButton *wireframe = addRadioButtonToGroup(mode, "WireFrame");
+
+	addColumn();
+
+	GLUI_Panel *landscape = addPanel("Landscape", 1);
+	GLUI_Listbox* landscapes= addListboxToPanel (landscape, "", &(((LightingScene*) scene)->landscapeOptions), 7);
+		landscapes->add_item(0, "Default");
+		landscapes->add_item(1, "Day");
+		landscapes->add_item(2, "Night");
 }
+
 
 void TPinterface::processGUI(GLUI_Control *ctrl)
 {

@@ -127,6 +127,8 @@ void LightingScene::init()
 	l2=1;
 	l3=1;
 	clockSwitcher=1;
+	skinRobot=0;
+	landscapeOptions=0;
 	robot=new MyRobot();
 	table = new myTable();
 	wall = new Plane(10, -1, -1, 2, 2);
@@ -155,8 +157,8 @@ void LightingScene::init()
 	floorAppearance->setTexture("floor.png");
 	clockAppearance=new CGFappearance(ambClock,difClock,specClock,shininessClock);
 	clockAppearance->setTexture("clock.png");
-	defaultRobot= new CGFappearance(ambD,difD,specD,shininessD);
-	defaultRobot->setTexture("defaultSkin.jpg");
+	robotAppearance= new CGFappearance(ambD,difD,specD,shininessD);
+	robotAppearance->setTexture("defaultSkin.jpg");
 	window = new CGFappearance(ambBd,difBd,specBd,shininessBd);
 	window->setTexture("window.png");
 	window->setTextureWrap(GL_CLAMP, GL_CLAMP);
@@ -222,6 +224,23 @@ void LightingScene::display()
 		light3->disable();
 		light3->draw();
 	}
+
+
+	//set up robot skins
+	if(skinRobot == 1)
+		robotAppearance->setTexture("camuflado.jpg");
+	else if(skinRobot == 2)
+		robotAppearance->setTexture("abstrata.jpg");
+	else
+		robotAppearance->setTexture("defaultSkin.jpg");
+
+	//set up landscapes
+	if(landscapeOptions == 1)
+		landscapeAppearance->setTexture("day.jpg");
+	else if(landscapeOptions == 2)
+		landscapeAppearance->setTexture("night.jpg");
+	else
+		landscapeAppearance->setTexture("landscape.png");
 
 	// Draw axis
 	axis.draw();
@@ -313,7 +332,7 @@ void LightingScene::display()
 	//-----ROBOT-----
 	//---------------
 	glPushMatrix();
-		defaultRobot->apply();
+		robotAppearance->apply();
 		robot->draw();
 	glPopMatrix();
 

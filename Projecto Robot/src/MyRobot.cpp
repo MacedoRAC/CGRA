@@ -14,7 +14,7 @@ MyRobot:: MyRobot(){
 	calcVertexBase();
 	calcVertexTop();
 	stacks=5;
-	wireframe=0;
+	modes=0;
 	calcTextCoord();
 
 	cout << "\ntextura base\n\n";
@@ -105,7 +105,7 @@ void MyRobot:: draw(){
 	glVertex3f(0, 0.3, 2);
 	glEnd();*/
 
-	if(wireframe == 1)
+	if(modes == 1)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	else
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
