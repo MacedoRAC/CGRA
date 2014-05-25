@@ -37,6 +37,7 @@ public:
 	void moveBack();
 	void calcVertexBase();
 	void calcVertexTop();
+	void calcTextCoord();
 	int wireframe;
 };
 

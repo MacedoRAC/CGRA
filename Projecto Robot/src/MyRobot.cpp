@@ -15,6 +15,7 @@ MyRobot:: MyRobot(){
 	calcVertexTop();
 	stacks=5;
 	wireframe=0;
+	calcTextCoord();
 
 	cout << "\ntextura base\n\n";
 	for(unsigned int i=0; i<13; i++)
@@ -68,21 +69,30 @@ void MyRobot:: calcVertexTop(){
 	float alpha = (float)3.0/4.0*pi;
 	float inc= pi/6.0;
 	Vertex vertex;
-	Texture text;
 
 	for(unsigned int i=0; i<13; i++){//only save xx and zz information. yy is alaways 1
 			vertex.x = 0.25*cos(alpha - inc*i);//xx
 			vertex.y = 1; //yy
 			vertex.z = 0.25*sin(alpha - inc*i);//zz
 
-			text.s=abs(0.25*cos(alpha - inc*i));
-			text.t=abs(0.25*sin(alpha - inc*i));
-
 		vertexTop.push_back(vertex);
-		textureTop.push_back(text);
 	}
 }
 
+void MyRobot:: calcTextCoord(){
+
+	for (unsigned int i = 0; i <13; i++)
+	{
+		Texture text;
+
+		for (int j = 0; j <= stacks; j++)
+		{
+			text.s= vertexBase[i].x + (vertexBase[i].x - vertexTop[i].x)*j*(1.0/stacks);
+			text.t= vertexBase[i].z + (vertexBase[i].z - vertexTop[i].z)*j*(1.0/stacks);
+		}
+		coordTexture.push_back(text);
+	}
+}
 
 void MyRobot:: draw(){
 
@@ -108,7 +118,7 @@ void MyRobot:: draw(){
 						   vertexBase[i].y + (j + 1) * (1.0 / stacks),
 						   vertexBase[i].z - (j + 1) * (vertexBase[i].z - vertexTop[i].z) / stacks);
 
-			glTexCoord2d(coordTexture[i].s*(j+1), coordTexture[i].t*(j+1));
+			//glTexCoord2d(coordTexture[i+1].s + 0.5, 0.5 - coordTexture[j+1].t);
 
 			glVertex3f(vertexBase[i].x - (j + 1) * (vertexBase[i].x - vertexTop[i].x) / stacks,
 						   vertexBase[i].y + (j + 1) * (1.0 / stacks),
@@ -121,7 +131,7 @@ void MyRobot:: draw(){
 						   vertexBase[i].y + j * (1.0 / stacks),
 						   vertexBase[i].z - j * (vertexBase[i].z - vertexTop[i].z) / stacks);
 
-			glTexCoord2d(coordTexture[i].s*j, coordTexture[i].t*j);
+			//glTexCoord2d(coordTexture[i].s + 0.5, 0.5 - coordTexture[j].t);
 
 			glVertex3f(vertexBase[i].x - j * (vertexBase[i].x - vertexTop[i].x) / stacks,
 						   vertexBase[i].y + j * (1.0 / stacks),
@@ -146,7 +156,6 @@ void MyRobot:: draw(){
 	glPushMatrix();
 	glBegin(GL_POLYGON);
 	for(unsigned int i=0; i<13; i++){
-		glTexCoord2f(textureTop[i].s, textureTop[i].t);
 		glNormal3f(0,1,0);
 		glVertex3f(vertexTop[i].x, vertexTop[i].y, vertexTop[i].z);
 	}
