@@ -1,6 +1,7 @@
 #include"MyRobot.h"
 #include "CGFapplication.h"
 #include<iostream>
+#include<math.h>
 
 #define pi acos(-1.0)
 
@@ -14,10 +15,20 @@ MyRobot:: MyRobot(){
 	calcVertexTop();
 	stacks=5;
 	wireframe=0;
+
+	cout << "\ntextura base\n\n";
+	for(unsigned int i=0; i<13; i++)
+		cout << vertexBase[i].x << " , " << vertexBase[i].z << endl;
+
+	cout << "\ntextura topo\n\n";
+	for(unsigned int i=0; i<13; i++)
+		cout << vertexTop[i].x << " , " << vertexTop[i].z << endl;
 }
 
 void MyRobot:: calcVertexBase(){
 	Vertex vertex;
+	float inc=(float)1/3;
+
 	vertex.x= -0.5;
 	vertex.y= 0;
 	vertex.z= 0.5;
@@ -25,42 +36,53 @@ void MyRobot:: calcVertexBase(){
 	vertexBase.push_back(vertex);
 
 	for(unsigned int i=1; i<13; i++){//only save xx and zz information. yy is alaways 0
-
+		
 		if(i<=3){
-			vertex.x +=(float)1/3;
+			vertex.x +=inc;
 			vertex.y=0;
 			vertex.z=0.5;
+
 		}else if(i>3 && i<=6){
 			vertex.x=0.5;
 			vertex.y=0;
-			vertex.z -=(float)1/3;
+			vertex.z -=inc;
+
 		}else if(i>6 && i<=9){
-			vertex.x -=(float)1/3;
+			vertex.x -=inc;
 			vertex.y=0;
 			vertex.z=-0.5;
+
 		}else if(i>9 && i<=12){
 			vertex.x=-0.5;
 			vertex.y=0;
-			vertex.z+=(float)1/3;
+			vertex.z+=inc;
+			
 		}
 
 		vertexBase.push_back(vertex);
 	}
+
 }
 
 void MyRobot:: calcVertexTop(){
 	float alpha = (float)3.0/4.0*pi;
 	float inc= pi/6.0;
 	Vertex vertex;
+	Texture text;
 
 	for(unsigned int i=0; i<13; i++){//only save xx and zz information. yy is alaways 1
 			vertex.x = 0.25*cos(alpha - inc*i);//xx
 			vertex.y = 1; //yy
 			vertex.z = 0.25*sin(alpha - inc*i);//zz
 
+			text.s=abs(0.25*cos(alpha - inc*i));
+			text.t=abs(0.25*sin(alpha - inc*i));
+
 		vertexTop.push_back(vertex);
+		textureTop.push_back(text);
 	}
 }
+
 
 void MyRobot:: draw(){
 
@@ -81,18 +103,25 @@ void MyRobot:: draw(){
 	for(int j=0; j<stacks ; j++){
 		glBegin(GL_TRIANGLE_STRIP);
 		for(unsigned i=0; i<13; i++){
-
+			
 			glNormal3f(vertexBase[i].x - (j + 1) * (vertexBase[i].x - vertexTop[i].x) / stacks,
 						   vertexBase[i].y + (j + 1) * (1.0 / stacks),
 						   vertexBase[i].z - (j + 1) * (vertexBase[i].z - vertexTop[i].z) / stacks);
+
+			glTexCoord2d(coordTexture[i].s*(j+1), coordTexture[i].t*(j+1));
 
 			glVertex3f(vertexBase[i].x - (j + 1) * (vertexBase[i].x - vertexTop[i].x) / stacks,
 						   vertexBase[i].y + (j + 1) * (1.0 / stacks),
 						   vertexBase[i].z - (j + 1) * (vertexBase[i].z - vertexTop[i].z) / stacks);
 			
+			
+			
+
 			glNormal3f(vertexBase[i].x - j * (vertexBase[i].x - vertexTop[i].x) / stacks,
 						   vertexBase[i].y + j * (1.0 / stacks),
 						   vertexBase[i].z - j * (vertexBase[i].z - vertexTop[i].z) / stacks);
+
+			glTexCoord2d(coordTexture[i].s*j, coordTexture[i].t*j);
 
 			glVertex3f(vertexBase[i].x - j * (vertexBase[i].x - vertexTop[i].x) / stacks,
 						   vertexBase[i].y + j * (1.0 / stacks),
@@ -101,12 +130,23 @@ void MyRobot:: draw(){
 		glEnd();
 	}
 
-
+	//draw base of robot
+	glNormal3f(0,-1,1);
+	glBegin(GL_QUADS);
+		glVertex3f(-0.5,0,0.5);
+		
+		glVertex3f(-0.5,0,-0.5);
+		
+		glVertex3f(0.5,0,-0.5);
+		
+		glVertex3f(0.5,0,0.5);
+	glEnd();
 
 	//draw vertexTop of the robot
 	glPushMatrix();
 	glBegin(GL_POLYGON);
 	for(unsigned int i=0; i<13; i++){
+		glTexCoord2f(textureTop[i].s, textureTop[i].t);
 		glNormal3f(0,1,0);
 		glVertex3f(vertexTop[i].x, vertexTop[i].y, vertexTop[i].z);
 	}

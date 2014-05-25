@@ -150,13 +150,16 @@ void LightingScene::init()
 	boardAppearance->setTexture("board.png");
 	boardAppearance->setTextureWrap(GL_CLAMP, GL_CLAMP);
 	landscapeAppearance = new CGFappearance(ambBd,difBd,specBd,shininessBd);
-	landscapeAppearance->setTexture("impostor.png");
+	landscapeAppearance->setTexture("landscape.png");
 	floorAppearance=new CGFappearance(ambBd,difBd,specBd,shininessBd);
 	floorAppearance->setTexture("floor.png");
 	clockAppearance=new CGFappearance(ambClock,difClock,specClock,shininessClock);
 	clockAppearance->setTexture("clock.png");
 	defaultRobot= new CGFappearance(ambD,difD,specD,shininessD);
 	defaultRobot->setTexture("defaultSkin.jpg");
+	window = new CGFappearance(ambBd,difBd,specBd,shininessBd);
+	window->setTexture("window.png");
+	window->setTextureWrap(GL_CLAMP, GL_CLAMP);
 
 	setUpdatePeriod(100);
 }
@@ -259,12 +262,6 @@ void LightingScene::display()
 	glPopMatrix();
 	*/
 
-	//IMPOSTOR
-	glPushMatrix();
-		materialD->apply();
-		impostor->draw();
-	glPopMatrix();
-
 	//Floor
 	glPushMatrix();
 		floorAppearance->apply();
@@ -325,6 +322,12 @@ void LightingScene::display()
 		clockAppearance->apply();
 		glTranslatef(7.25,8.5,0.3);
 		clock->draw();
+	glPopMatrix();
+
+	//IMPOSTOR
+	glPushMatrix();
+		window->apply();
+		impostor->draw();
 	glPopMatrix();
 
 	// ---- END Primitive drawing section

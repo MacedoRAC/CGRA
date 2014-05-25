@@ -11,6 +11,11 @@ struct Vertex{
 	float z;
 };
 
+struct Texture{
+	float s;
+	float t;
+};
+
 
 class MyRobot{
 	float angle;
@@ -20,6 +25,9 @@ class MyRobot{
 	int stacks;
 	vector<Vertex> vertexBase;
 	vector<Vertex> vertexTop;
+	vector<Texture> textureBase;
+	vector<Texture> textureTop;
+	vector<Texture> coordTexture;
 	
 public:
 	MyRobot();
